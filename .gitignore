@@ -1,0 +1,4 @@
+dump.sql
+backend/config/license.key.1
+backend/config/license.key
+.ddev/.env.web
