@@ -12,7 +12,7 @@ if (isPreview.value) {
   definePageMeta({ ssr: false })
 }
 
-// Fetch data function
+// Fetch data function with error handling
 const { data, refresh } = await useAsyncData(
   'home',
   async () => {
