@@ -1,0 +1,1283 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>fortrabbit.yml plan</title>
+    <style>
+      @font-face {
+        font-family: "Hubot Sans";
+        src: url("assets/fonts/HubotSans-Bold.woff2") format("woff2");
+        font-weight: 700;
+        font-display: swap;
+      }
+
+      @font-face {
+        font-family: "Hubot Sans";
+        src: url("assets/fonts/HubotSans-Medium.woff2") format("woff2");
+        font-weight: 500;
+        font-display: swap;
+      }
+
+      :root {
+        color-scheme: light;
+        --main-50: #f8fafc;
+        --main-100: #f1f5f9;
+        --main-200: #e2e8f0;
+        --main-300: #cbd5e1;
+        --main-400: #94a3b8;
+        --main-500: #64748b;
+        --main-600: #475569;
+        --main-700: #334155;
+        --main-800: #1e293b;
+        --main-900: #0f172a;
+        --main-950: #020617;
+        --link-100: #fae8ff;
+        --link-300: #f0abfc;
+        --link-600: #c026d3;
+        --link-700: #a21caf;
+        --link-900: #701a75;
+        --accent-100: #cffafe;
+        --accent-300: #67e8f9;
+        --accent-500: #06b6d4;
+        --accent-700: #0e7490;
+        --move-100: #e0e7ff;
+        --move-200: #c7d2fe;
+        --move-300: #a5b4fc;
+        --move-700: #4338ca;
+        --move-900: #312e81;
+        --ok: #15803d;
+        --warn: #a16207;
+        --bad: #b91c1c;
+        --page: var(--main-100);
+        --panel: var(--main-50);
+        --panel-strong: #ffffff;
+        --text: var(--main-900);
+        --muted: var(--main-600);
+        --soft: var(--main-500);
+        --border: var(--main-300);
+        --shadow: 0 20px 60px rgb(15 23 42 / 0.12);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        background:
+          linear-gradient(180deg, rgb(255 255 255 / 0.7), rgb(226 232 240 / 0.35)),
+          var(--page);
+        color: var(--text);
+        font-family:
+          ui-sans-serif,
+          system-ui,
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          sans-serif;
+        line-height: 1.5;
+      }
+
+      a {
+        color: var(--link-700);
+        text-decoration: none;
+      }
+
+      a:hover {
+        text-decoration: underline;
+      }
+
+      h1,
+      h2,
+      h3,
+      .fancy {
+        font-family: "Hubot Sans", sans-serif;
+        font-weight: 700;
+        letter-spacing: 0;
+      }
+
+      h1,
+      h2,
+      h3,
+      p {
+        margin: 0;
+      }
+
+      code,
+      pre {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      }
+
+      .brand {
+        font-family: Georgia, "Times New Roman", Times, serif;
+        font-style: italic;
+        font-weight: 700;
+        letter-spacing: 0.2px;
+      }
+
+      .deck-shell {
+        min-height: 100vh;
+        padding: clamp(24px, 3vw, 48px);
+      }
+
+      .deck {
+        width: min(1180px, 100%);
+        margin: 0 auto;
+        display: grid;
+        gap: 20px;
+      }
+
+      .topbar {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 10px 0 18px;
+        background: linear-gradient(180deg, var(--page) 70%, rgb(241 245 249 / 0));
+      }
+
+      .topbar-left {
+        display: flex;
+        align-items: center;
+        min-width: 0;
+        gap: 12px;
+      }
+
+      .topbar-title {
+        color: var(--main-600);
+        font-size: 14px;
+        white-space: nowrap;
+      }
+
+      .slide-counter {
+        color: var(--main-500);
+        font-size: 13px;
+        font-variant-numeric: tabular-nums;
+      }
+
+      .controls {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .control-button {
+        width: 34px;
+        height: 30px;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        background: var(--panel-strong);
+        color: var(--main-700);
+        cursor: pointer;
+        font: inherit;
+      }
+
+      .control-button:hover {
+        background: var(--main-200);
+      }
+
+      .slide {
+        min-height: min(780px, calc(100vh - 140px));
+        display: grid;
+        align-content: center;
+        gap: 28px;
+        padding: clamp(32px, 5vw, 72px);
+        border: 1px solid rgb(148 163 184 / 0.7);
+        border-radius: 8px;
+        background: var(--panel-strong);
+        box-shadow: var(--shadow);
+        scroll-margin-top: 72px;
+      }
+
+      .slide.compact {
+        align-content: start;
+      }
+
+      .eyebrow {
+        width: fit-content;
+        padding: 2px 8px;
+        border-radius: 4px;
+        background: var(--main-200);
+        color: var(--main-600);
+        font-size: 13px;
+        font-weight: 700;
+      }
+
+      .hero-title {
+        max-width: 920px;
+        font-size: clamp(44px, 7.5vw, 104px);
+        line-height: 0.95;
+      }
+
+      .slide-title {
+        max-width: 900px;
+        font-size: clamp(34px, 5vw, 68px);
+        line-height: 1;
+      }
+
+      .lede {
+        max-width: 820px;
+        color: var(--main-600);
+        font-size: clamp(20px, 2.4vw, 30px);
+        line-height: 1.25;
+      }
+
+      .body-copy {
+        max-width: 760px;
+        color: var(--main-700);
+        font-size: clamp(17px, 1.5vw, 21px);
+      }
+
+      .grid {
+        display: grid;
+        gap: 16px;
+      }
+
+      .grid.two {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .grid.three {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .panel {
+        min-width: 0;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        background: var(--main-100);
+        padding: 18px;
+      }
+
+      .panel.dark {
+        background: var(--main-900);
+        color: var(--main-100);
+        border-color: var(--main-800);
+      }
+
+      .panel.dark .muted {
+        color: var(--main-400);
+      }
+
+      .panel.accent {
+        background: var(--accent-100);
+        border-color: var(--accent-300);
+      }
+
+      .panel.move {
+        background: var(--move-100);
+        border-color: var(--move-300);
+      }
+
+      .panel.link {
+        background: var(--link-100);
+        border-color: var(--link-300);
+      }
+
+      .panel h3 {
+        margin-bottom: 8px;
+        font-size: 20px;
+      }
+
+      .muted {
+        color: var(--muted);
+      }
+
+      .small {
+        font-size: 14px;
+      }
+
+      .tiny {
+        font-size: 12px;
+      }
+
+      .kicker-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .token {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        min-height: 26px;
+        padding: 3px 8px;
+        border-radius: 5px;
+        background: var(--main-200);
+        color: var(--main-700);
+        font-size: 13px;
+        font-weight: 700;
+      }
+
+      .token.ok {
+        background: #dcfce7;
+        color: var(--ok);
+      }
+
+      .token.warn {
+        background: #fef3c7;
+        color: var(--warn);
+      }
+
+      .token.bad {
+        background: #fee2e2;
+        color: var(--bad);
+      }
+
+      .table-wrap {
+        overflow-x: auto;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        background: var(--main-100);
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 720px;
+        font-size: 15px;
+      }
+
+      th {
+        background: var(--main-200);
+        color: var(--main-800);
+        text-align: left;
+        font-weight: 700;
+      }
+
+      th,
+      td {
+        padding: 10px 12px;
+        border-bottom: 1px solid var(--border);
+        vertical-align: top;
+      }
+
+      tr:last-child td {
+        border-bottom: 0;
+      }
+
+      .code-block {
+        overflow-x: auto;
+        border-radius: 8px;
+        background: var(--main-900);
+        color: var(--main-100);
+        padding: 18px;
+        font-size: clamp(13px, 1.2vw, 16px);
+        line-height: 1.45;
+      }
+
+      .flow {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(130px, 1fr));
+        gap: 10px;
+        align-items: stretch;
+      }
+
+      .step {
+        position: relative;
+        min-height: 118px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        background: var(--main-100);
+        padding: 14px;
+      }
+
+      .step:not(:last-child)::after {
+        content: ">";
+        position: absolute;
+        top: 50%;
+        right: -12px;
+        z-index: 2;
+        width: 22px;
+        height: 22px;
+        transform: translateY(-50%);
+        border-radius: 999px;
+        background: var(--main-800);
+        color: var(--main-100);
+        text-align: center;
+        font-family: "Hubot Sans", sans-serif;
+        font-size: 13px;
+        line-height: 22px;
+      }
+
+      .step-number {
+        color: var(--main-500);
+        font-family: "Hubot Sans", sans-serif;
+        font-size: 12px;
+      }
+
+      .step-title {
+        margin-top: 6px;
+        font-family: "Hubot Sans", sans-serif;
+        font-weight: 700;
+      }
+
+      .step-copy {
+        margin-top: 6px;
+        color: var(--main-600);
+        font-size: 13px;
+      }
+
+      .split {
+        display: grid;
+        grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+        gap: 22px;
+        align-items: start;
+      }
+
+      .big-number {
+        font-family: "Hubot Sans", sans-serif;
+        font-size: clamp(48px, 7vw, 88px);
+        line-height: 0.9;
+      }
+
+      .footer-note {
+        color: var(--main-500);
+        font-size: 13px;
+      }
+
+      .decision-list {
+        display: grid;
+        gap: 10px;
+      }
+
+      .decision {
+        display: grid;
+        grid-template-columns: 150px minmax(0, 1fr);
+        gap: 12px;
+        align-items: start;
+        padding: 12px;
+        border-radius: 8px;
+        background: var(--main-100);
+        border: 1px solid var(--border);
+      }
+
+      .decision strong {
+        font-family: "Hubot Sans", sans-serif;
+      }
+
+      @media (max-width: 860px) {
+        .deck-shell {
+          padding: 14px;
+        }
+
+        .topbar {
+          position: static;
+          flex-wrap: wrap;
+        }
+
+        .slide {
+          min-height: auto;
+          padding: 28px;
+        }
+
+        .grid.two,
+        .grid.three,
+        .split,
+        .flow {
+          grid-template-columns: 1fr;
+        }
+
+        .step:not(:last-child)::after {
+          display: none;
+        }
+
+        .decision {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media print {
+        body {
+          background: white;
+        }
+
+        .deck-shell {
+          padding: 0;
+        }
+
+        .topbar {
+          display: none;
+        }
+
+        .deck {
+          width: 100%;
+          gap: 0;
+        }
+
+        .slide {
+          min-height: 100vh;
+          break-after: page;
+          border: 0;
+          border-radius: 0;
+          box-shadow: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="deck-shell">
+      <div class="deck">
+        <nav class="topbar" aria-label="Presentation controls">
+          <div class="topbar-left">
+            <div class="brand">&bull; fortrabbit</div>
+            <div class="topbar-title">YAML config proposal</div>
+          </div>
+          <div class="controls">
+            <span class="slide-counter"><span id="current-slide">1</span> / <span id="total-slides">12</span></span>
+            <button class="control-button" type="button" data-prev aria-label="Previous slide">&lt;</button>
+            <button class="control-button" type="button" data-next aria-label="Next slide">&gt;</button>
+          </div>
+        </nav>
+
+        <section class="slide" id="slide-1">
+          <div class="eyebrow">Implementation plan</div>
+          <h1 class="hero-title">fortrabbit.yml</h1>
+          <p class="lede">
+            A YAML config for apps and environments that mirrors the dashboard,
+            works with git push, and keeps frapi as the source of truth.
+          </p>
+          <div class="kicker-row">
+            <span class="token">git push as save</span>
+            <span class="token">dashboard drift visible</span>
+            <span class="token">downloadable platform YAML</span>
+          </div>
+        </section>
+
+        <section class="slide compact" id="slide-2">
+          <div class="eyebrow">Goal</div>
+          <h2 class="slide-title">Configuration should feel like the dashboard, just stored in git.</h2>
+          <div class="grid three">
+            <div class="panel">
+              <h3>Exact platform shape</h3>
+              <p class="muted">App config, environment config, domains, deployment settings, and components map to dashboard concepts.</p>
+            </div>
+            <div class="panel">
+              <h3>Git push saves config</h3>
+              <p class="muted">On push, frapi reads the config and updates the target environment when the file is valid and the actor is allowed.</p>
+            </div>
+            <div class="panel">
+              <h3>Dashboard remains transparent</h3>
+              <p class="muted">The dashboard shows applied state, drift, source repo, last commit, and events for every config change.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="slide compact" id="slide-3">
+          <div class="eyebrow">Repository layout</div>
+          <h2 class="slide-title">One directory, app file, shared base, environment files.</h2>
+          <div class="split">
+            <pre class="code-block"><code>.fortrabbit/
+  app.yml
+  base.yml
+  production.yml
+  staging.yml
+  en-123tg5.yml</code></pre>
+            <div class="decision-list">
+              <div class="decision">
+                <strong>Directory</strong>
+                <span>Use <code>.fortrabbit/</code> as the main name. It is clear and works well in templates.</span>
+              </div>
+              <div class="decision">
+                <strong>Base rule</strong>
+                <span>If <code>base.yml</code> sits beside an environment file, it is inherited and overridden by that file.</span>
+              </div>
+              <div class="decision">
+                <strong>App config</strong>
+                <span><code>app.yml</code> owns app-level settings such as region and app details.</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="slide compact" id="slide-4">
+          <div class="eyebrow">Two representations</div>
+          <h2 class="slide-title">Git says what the user wants. The platform export says what exists.</h2>
+          <div class="grid two">
+            <div class="panel move">
+              <h3>Git version</h3>
+              <p class="muted">Written by humans. It may use friendly filenames, skip defaults, or be behind dashboard edits.</p>
+              <pre class="code-block"><code>production.yml
+staging.yml</code></pre>
+            </div>
+            <div class="panel accent">
+              <h3>Platform version</h3>
+              <p class="muted">YAML generated from frapi. It is pretty, complete, and includes IDs, defaults, and current values.</p>
+              <pre class="code-block"><code>en-123tg5.yml
+en-145xg5.yml</code></pre>
+            </div>
+          </div>
+          <p class="footer-note">Users can download the real platform config from the dashboard at any time.</p>
+        </section>
+
+        <section class="slide compact" id="slide-5">
+          <div class="eyebrow">Environment identity</div>
+          <h2 class="slide-title">Environment IDs are preferred. Names are accepted aliases.</h2>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Priority</th>
+                  <th>Resolver</th>
+                  <th>Behavior</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><span class="token ok">1</span></td>
+                  <td>Explicit <code>id</code> inside the YAML</td>
+                  <td>Use it as the environment identity. If <code>name</code> differs, treat the name as a requested rename.</td>
+                </tr>
+                <tr>
+                  <td><span class="token ok">2</span></td>
+                  <td>Filename is an existing environment ID</td>
+                  <td>Use the filename as the stable identity, useful across multiple repositories.</td>
+                </tr>
+                <tr>
+                  <td><span class="token warn">3</span></td>
+                  <td>Explicit <code>name</code> inside the YAML</td>
+                  <td>Match by name. If more than one match is possible, stop and ask for an ID.</td>
+                </tr>
+                <tr>
+                  <td><span class="token">4</span></td>
+                  <td>Filename stem</td>
+                  <td>Use it as the environment name. If no environment exists, treat it as a creation request.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="slide compact" id="slide-6">
+          <div class="eyebrow">YAML example</div>
+          <h2 class="slide-title">App-level config is small and stable.</h2>
+          <div class="split">
+            <pre class="code-block"><code># .fortrabbit/app.yml
+id: ap-bucks1
+name: Bucks
+team: tm-park5a
+region: eu-loc
+software:
+  preset: craft-cms
+  version: "4.0"</code></pre>
+            <div class="decision-list">
+              <div class="decision">
+                <strong>Region</strong>
+                <span>Defined on the app. It is used during creation and cannot be changed after the app exists.</span>
+              </div>
+              <div class="decision">
+                <strong>Team</strong>
+                <span>Used during new app creation. If an existing app belongs to another team, show drift and do not move the app.</span>
+              </div>
+              <div class="decision">
+                <strong>Software</strong>
+                <span>Uses real dashboard preset slugs like <code>craft-cms</code>, <code>laravel</code>, <code>wordpress</code>, and <code>general-php</code>.</span>
+              </div>
+              <div class="decision">
+                <strong>ID</strong>
+                <span>Optional in user-created YAML. Present in platform exports and useful when syncing existing apps.</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="slide compact" id="slide-7">
+          <div class="eyebrow">YAML example</div>
+          <h2 class="slide-title">Base config removes repeated environment settings.</h2>
+          <div class="split">
+            <pre class="code-block"><code># .fortrabbit/base.yml
+php:
+  version: "8.4"
+node:
+  version: "24"
+deployment:
+  permission: repositoryAccess
+  trigger: push
+  strategy: merge
+  buildCommands:
+    - composer install --no-dev --prefer-dist --no-interaction --no-ansi --no-progress
+    - npm install
+  postDeployCommands:
+    - php craft migrate/all
+    - php craft project-config/apply
+    - php craft clear-caches/all
+  excludePatterns:
+    - /node_modules
+  replacePatterns:
+    - /config/project
+  cachedDirectories:
+    - node_modules
+    - vendor</code></pre>
+            <div class="panel">
+              <h3>Inheritance rule</h3>
+              <p class="muted">Every sibling environment file inherits this file. The environment file only needs to declare what differs.</p>
+              <p class="muted" style="margin-top: 12px">This mirrors the dashboard deployment settings: permission, trigger, strategy, build commands, post-deploy commands, excludes, replaces, and cached directories.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="slide compact" id="slide-8">
+          <div class="eyebrow">YAML example</div>
+          <h2 class="slide-title">Friendly filenames work for templates and simple apps.</h2>
+          <div class="split">
+            <pre class="code-block"><code># .fortrabbit/production.yml
+name: production
+branch: main
+rootPath: web
+domains:
+  - name: www.factor-qqbqmrc9r7h.com
+    main: true
+  - name: factor-qqbqmrc9r7h.com
+    forwardsTo: www.factor-qqbqmrc9r7h.com
+components:
+  php:
+    plan: XS
+    autoscaling: false
+  database:
+    plan: XS
+    autoscaling: true
+  storage:
+    plan: XS
+    autoscaling: true
+  traffic:
+    plan: XS
+    autoscaling: true
+  key-value-store:
+    plan: OFF
+  backups:
+    plan: OFF
+  jobs:
+    plan: OFF</code></pre>
+            <div class="decision-list">
+              <div class="decision">
+                <strong>Identity</strong>
+                <span>No ID is required. The filename or <code>name</code> resolves to an existing environment or creates one.</span>
+              </div>
+              <div class="decision">
+                <strong>Domains</strong>
+                <span>Domains belong to the environment. Main and forwarding rules are visible before apply.</span>
+              </div>
+              <div class="decision">
+                <strong>Components</strong>
+                <span>Component keys match the dashboard: PHP, MySQL, Storage, Traffic, Key-value store, Backups, and Jobs.</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="slide compact" id="slide-9">
+          <div class="eyebrow">YAML example</div>
+          <h2 class="slide-title">Environment files can also cover runtime, env vars, firewall, jobs, and crons.</h2>
+          <div class="split">
+            <pre class="code-block"><code># .fortrabbit/staging.yml
+name: staging
+branch: staging
+runtime:
+  php:
+    version: "8.4"
+    keepUpdated: true
+    settings:
+      max_execution_time: 60
+      upload_max_filesize: 32M
+      post_max_size: 32M
+  mysql:
+    version: "8.0"
+    keepUpdated: true
+env:
+  CRAFT_ENVIRONMENT: staging
+  CRAFT_STREAM_LOG: "true"
+  CRAFT_SECURITY_KEY:
+    required: true
+    secret: true
+    fromPreset: craft-cms
+firewall:
+  incoming:
+    waf: true
+  outgoing:
+    - description: Search API
+      port: 9200
+    - description: External service range
+      ports: [3000, 3010]
+jobs:
+  - name: queue-worker
+    type: worker
+    command: php craft queue/listen
+    isActive: true
+    maxRuntime: 300
+    exitTimeout: 30
+    exitSignal: TERM
+crons:
+  - name: clear-caches
+    command: php craft clear-caches/all
+    expression: "0 3 * * *"</code></pre>
+            <div class="decision-list">
+              <div class="decision">
+                <strong>Env vars</strong>
+                <span>Template YAML can declare required values. The new app flow asks for the missing values before creation.</span>
+              </div>
+              <div class="decision">
+                <strong>Runtime</strong>
+                <span>PHP and MySQL versions, update behavior, and PHP settings are environment config.</span>
+              </div>
+              <div class="decision">
+                <strong>Workers</strong>
+                <span>Jobs and cron commands belong beside the environment that runs them.</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="slide compact" id="slide-10">
+          <div class="eyebrow">YAML example</div>
+          <h2 class="slide-title">Environment IDs remove cross-repo ambiguity.</h2>
+          <div class="split">
+            <pre class="code-block"><code># .fortrabbit/en-ptjghl.yml
+id: en-ptjghl
+name: production
+branch: staging
+deployment:
+  trigger: manual
+  strategy: replace
+  excludePatterns:
+    - /web/uploads
+    - /storage/runtime
+components:
+  php:
+    plan: XS
+  database:
+    plan: XS
+  backups:
+    plan: Backups XS
+  jobs:
+    plan: Jobs XS</code></pre>
+            <div class="panel move">
+              <h3>Resolution</h3>
+              <p class="muted">If <code>id</code> is present, it wins. The filename may also be the ID. The name remains mutable config, so this file can request a rename if the actor has permission.</p>
+              <p class="muted" style="margin-top: 12px">This is the preferred style for multiple repositories because every repo points to the same environment without guessing.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="slide compact" id="slide-11">
+          <div class="eyebrow">YAML example</div>
+          <h2 class="slide-title">Platform exports are the same config, with more details.</h2>
+          <div class="split">
+            <pre class="code-block"><code># downloaded from the dashboard
+# .fortrabbit/en-ptjghl.yml
+id: en-ptjghl
+name: production
+state: online
+team: tm-park5a
+domains:
+  - id: do-xzypwk
+    name: www.factor-qqbqmrc9r7h.com
+    type: subdomain
+    main: true
+  - id: do-mtc1gw
+    name: factor-qqbqmrc9r7h.com
+    type: apex
+    forwardsTo: do-xzypwk
+components:
+  php: { plan: XS, autoscaling: false }
+  database: { plan: XS, autoscaling: true }
+  storage: { plan: XS, autoscaling: true }
+  traffic: { plan: XS, autoscaling: true }
+  key-value-store: { plan: OFF }
+  backups: { plan: OFF }
+  jobs: { plan: OFF }</code></pre>
+            <div class="panel accent">
+              <h3>Pretty and complete</h3>
+              <p class="muted">The export uses the same YAML config format. It adds platform IDs, resolved defaults, and current values from frapi.</p>
+              <p class="muted" style="margin-top: 12px">Source, actor, commit, events, and drift stay in frapi. The exported YAML stays focused on app and environment config.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="slide compact" id="slide-12">
+          <div class="eyebrow">YAML cases</div>
+          <h2 class="slide-title">The resolver handles names, IDs, new environments, drift, and denied changes.</h2>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>YAML case</th>
+                  <th>Example</th>
+                  <th>Result</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Existing environment by ID</td>
+                  <td><code>id: en-ptjghl</code></td>
+                  <td><span class="token ok">apply</span> ID identifies the environment.</td>
+                </tr>
+                <tr>
+                  <td>Existing environment by filename ID</td>
+                  <td><code>en-ptjghl.yml</code></td>
+                  <td><span class="token ok">apply</span> Filename identifies the environment.</td>
+                </tr>
+                <tr>
+                  <td>Existing environment by name</td>
+                  <td><code>name: production</code></td>
+                  <td><span class="token ok">apply</span> Name is accepted if unique.</td>
+                </tr>
+                <tr>
+                  <td>New environment</td>
+                  <td><code>preview-pr-42.yml</code></td>
+                  <td><span class="token ok">create</span> Subject to create permissions and app limits.</td>
+                </tr>
+                <tr>
+                  <td>Ambiguous name</td>
+                  <td><code>name: staging</code></td>
+                  <td><span class="token bad">reject</span> Ask for an environment ID.</td>
+                </tr>
+                <tr>
+                  <td>Immutable app region differs</td>
+                  <td><code>region: us-e1a</code></td>
+                  <td><span class="token warn">drift</span> Show it in the dashboard and deploy logs; do nothing.</td>
+                </tr>
+                <tr>
+                  <td>Existing app team differs</td>
+                  <td><code>team: tm-park5a</code></td>
+                  <td><span class="token warn">drift</span> Show it in the dashboard and deploy logs; do not move the app.</td>
+                </tr>
+                <tr>
+                  <td>Denied component booking</td>
+                  <td><code>jobs: { plan: Jobs XS }</code></td>
+                  <td><span class="token warn">drift</span> Current booking stays unchanged and deployment reports the denied update.</td>
+                </tr>
+                <tr>
+                  <td>File removed from git</td>
+                  <td><code>production.yml</code> deleted</td>
+                  <td><span class="token">unmanaged</span> Stop git-based management; do not delete the environment.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="slide compact" id="slide-13">
+          <div class="eyebrow">Apply model</div>
+          <h2 class="slide-title">Git push behaves like saving config in the dashboard.</h2>
+          <div class="flow">
+            <div class="step">
+              <div class="step-number">01</div>
+              <div class="step-title">Receive push</div>
+              <div class="step-copy">Detect <code>.fortrabbit/</code> in the pushed tree.</div>
+            </div>
+            <div class="step">
+              <div class="step-number">02</div>
+              <div class="step-title">Parse config</div>
+              <div class="step-copy">Merge <code>base.yml</code>, resolve app and environment files.</div>
+            </div>
+            <div class="step">
+              <div class="step-number">03</div>
+              <div class="step-title">Validate</div>
+              <div class="step-copy">Run schema, identity, permission, and business rules.</div>
+            </div>
+            <div class="step">
+              <div class="step-number">04</div>
+              <div class="step-title">Apply state</div>
+              <div class="step-copy">Update frapi state to match the requested config.</div>
+            </div>
+            <div class="step">
+              <div class="step-number">05</div>
+              <div class="step-title">Report result</div>
+              <div class="step-copy">Write deploy logs, events, drift, and dashboard status.</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="slide compact" id="slide-14">
+          <div class="eyebrow">Multiple repositories</div>
+          <h2 class="slide-title">The environment is the target. The last successful config push wins.</h2>
+          <div class="grid two">
+            <div class="panel">
+              <h3>Supported</h3>
+              <p class="muted">Different repositories may define environments for the same app. This enables split source ownership while keeping platform state centralized.</p>
+            </div>
+            <div class="panel">
+              <h3>Tracked source</h3>
+              <p class="muted">Store the winning source as repo, branch, commit, pushed actor, and timestamp. Show it in the dashboard.</p>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Repository</th>
+                  <th>Environment file</th>
+                  <th>Result</th>
+                  <th>Dashboard state</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>shop/frontend</code></td>
+                  <td><code>production.yml</code></td>
+                  <td><span class="token ok">applied</span></td>
+                  <td>Current source until another valid push targets the same environment.</td>
+                </tr>
+                <tr>
+                  <td><code>shop/worker</code></td>
+                  <td><code>en-123tg5.yml</code></td>
+                  <td><span class="token ok">applied later</span></td>
+                  <td>Becomes the current source because it resolved to the same environment ID.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="slide compact" id="slide-15">
+          <div class="eyebrow">Dashboard conflict</div>
+          <h2 class="slide-title">Dashboard edits do not write back to repositories.</h2>
+          <div class="grid three">
+            <div class="panel">
+              <h3>Current state</h3>
+              <p class="muted">frapi remains the platform state store. Dashboard saves update that state directly.</p>
+            </div>
+            <div class="panel">
+              <h3>Drift</h3>
+              <p class="muted">If git config differs from the platform state, show drift in the dashboard.</p>
+            </div>
+            <div class="panel">
+              <h3>Export</h3>
+              <p class="muted">Offer a downloadable <code>.fortrabbit/</code> directory that users can commit. Later, offer to create a pull request for them.</p>
+            </div>
+          </div>
+          <p class="body-copy">No dashboard ignore setting for v1. Removing the file from git stops git-based management for that environment. It should not silently delete the environment.</p>
+        </section>
+
+        <section class="slide compact" id="slide-16">
+          <div class="eyebrow">Permissions</div>
+          <h2 class="slide-title">Component bookings are allowed only when the actor is allowed.</h2>
+          <div class="split">
+            <div>
+              <p class="body-copy">A developer can push a config file that requests booking changes. The platform should validate the pushing actor against the same permission model used by the dashboard.</p>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Case</th>
+                    <th>Outcome</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Actor has booking permission</td>
+                    <td><span class="token ok">apply</span> Update components and record the event.</td>
+                  </tr>
+                  <tr>
+                    <td>Actor lacks booking permission</td>
+                    <td><span class="token bad">reject</span> Keep current booking, show drift, and write it to the deploy log.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <section class="slide compact" id="slide-17">
+          <div class="eyebrow">Events</div>
+          <h2 class="slide-title">Every config change needs an audit trail.</h2>
+          <div class="grid two">
+            <div class="panel dark">
+              <h3>Git-driven event</h3>
+              <p class="muted">Actor, repository, branch, commit, environment, changed resources, check result, and apply result.</p>
+            </div>
+            <div class="panel dark">
+              <h3>Dashboard-driven event</h3>
+              <p class="muted">Actor, UI surface, changed resources, previous value, new value, and resulting drift if a git config exists.</p>
+            </div>
+          </div>
+          <p class="body-copy">This makes the dashboard answer the operational question: who or what is responsible for the current state?</p>
+        </section>
+
+        <section class="slide compact" id="slide-18">
+          <div class="eyebrow">Create from template</div>
+          <h2 class="slide-title">A dedicated review page replaces the normal app wizard.</h2>
+          <div class="split">
+            <div>
+              <p class="body-copy">The URL reads a repository, finds <code>.fortrabbit/</code>, checks the config, and shows what will be created.</p>
+              <pre class="code-block"><code>dashboard.fortrabbit.com/new?template=https://github.com/fortrabbit/craft-cms-starter</code></pre>
+              <p class="body-copy" style="margin-top: 14px">
+                <a href="./fortrabbit-template-preview.html">Open the template preview page</a>
+              </p>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Resource</th>
+                    <th>Preview</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>App</td>
+                    <td>craft-cms-starter, eu-west</td>
+                    <td><span class="token ok">valid</span></td>
+                  </tr>
+                  <tr>
+                    <td>Environments</td>
+                    <td>production, staging</td>
+                    <td><span class="token ok">2 create</span></td>
+                  </tr>
+                  <tr>
+                    <td>Domains</td>
+                    <td>example.com, staging.example.com</td>
+                    <td><span class="token warn">DNS later</span></td>
+                  </tr>
+                  <tr>
+                    <td>Components</td>
+                    <td>PHP, MySQL, object storage</td>
+                    <td><span class="token ok">priced</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <section class="slide compact" id="slide-19">
+          <div class="eyebrow">Scope</div>
+          <h2 class="slide-title">The YAML should cover app source config, not account management.</h2>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Scope</th>
+                  <th>Covered</th>
+                  <th>Notes</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><span class="token ok">v1</span></td>
+                  <td>App name, team at creation, region at creation, software, environments, deployment, env vars, domains, components, firewall, PHP/MySQL settings, jobs, crons.</td>
+                  <td>These map directly to app or environment config.</td>
+                </tr>
+                <tr>
+                  <td><span class="token warn">references</span></td>
+                  <td>Secrets, SSH keys, payment method, people, team access.</td>
+                  <td>Use dashboard input or references. Do not store secret values or personal access config in git.</td>
+                </tr>
+                <tr>
+                  <td><span class="token">later</span></td>
+                  <td>Create a pull request from the dashboard export.</td>
+                  <td>First ship download. Later, let the dashboard commit the platform config back to git.</td>
+                </tr>
+                <tr>
+                  <td><span class="token">dashboard only</span></td>
+                  <td>Billing details, user settings, team settings, logs, metrics, backup restore, deploy, restart, delete.</td>
+                  <td>These are actions, account settings, or observability, not repository config.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="slide compact" id="slide-20">
+          <div class="eyebrow">Implementation sequence</div>
+          <h2 class="slide-title">Build the contract first, then the UI.</h2>
+          <div class="decision-list">
+            <div class="decision">
+              <strong>1. Schema</strong>
+              <span>Define <code>app.yml</code>, <code>base.yml</code>, environment YAML, name/ID lookup, inheritance, and platform export format.</span>
+            </div>
+            <div class="decision">
+              <strong>2. Parser</strong>
+              <span>Read pushed tree, merge base config, resolve environment aliases, and produce a normalized plan.</span>
+            </div>
+            <div class="decision">
+              <strong>3. Validator</strong>
+              <span>Run file shape, permission, fixed region, domain, component booking, and multi-repo checks.</span>
+            </div>
+            <div class="decision">
+              <strong>4. Apply engine</strong>
+              <span>Apply accepted changes to frapi state. Source, actor, commit, and drift are stored in frapi.</span>
+            </div>
+            <div class="decision">
+              <strong>5. Dashboard</strong>
+              <span>Show drift, events, download, deploy logs, and template review.</span>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <script>
+      const slides = Array.from(document.querySelectorAll(".slide"));
+      const currentSlide = document.querySelector("#current-slide");
+      const totalSlides = document.querySelector("#total-slides");
+      const previousButton = document.querySelector("[data-prev]");
+      const nextButton = document.querySelector("[data-next]");
+      let activeIndex = 0;
+
+      totalSlides.textContent = String(slides.length);
+
+      function setActiveSlide(index, shouldScroll = true, behavior = "smooth") {
+        activeIndex = Math.max(0, Math.min(slides.length - 1, index));
+        currentSlide.textContent = String(activeIndex + 1);
+        if (shouldScroll) {
+          slides[activeIndex].scrollIntoView({ behavior, block: "start" });
+        }
+      }
+
+      previousButton.addEventListener("click", () => setActiveSlide(activeIndex - 1));
+      nextButton.addEventListener("click", () => setActiveSlide(activeIndex + 1));
+
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "ArrowRight" || event.key === "PageDown" || event.key === " ") {
+          event.preventDefault();
+          setActiveSlide(activeIndex + 1);
+        }
+
+        if (event.key === "ArrowLeft" || event.key === "PageUp") {
+          event.preventDefault();
+          setActiveSlide(activeIndex - 1);
+        }
+
+        if (event.key === "Home") {
+          event.preventDefault();
+          setActiveSlide(0);
+        }
+
+        if (event.key === "End") {
+          event.preventDefault();
+          setActiveSlide(slides.length - 1);
+        }
+      });
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          const visible = entries
+            .filter((entry) => entry.isIntersecting)
+            .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+          if (!visible) return;
+          activeIndex = slides.indexOf(visible.target);
+          currentSlide.textContent = String(activeIndex + 1);
+        },
+        { threshold: [0.45, 0.65, 0.85] },
+      );
+
+      slides.forEach((slide) => observer.observe(slide));
+
+      const hash = window.location.hash || `#${window.location.href.split("#")[1] || ""}`;
+      const hashSlideIndex = slides.findIndex((slide) => `#${slide.id}` === hash);
+      setActiveSlide(hashSlideIndex >= 0 ? hashSlideIndex : 0, hashSlideIndex >= 0, "auto");
+    </script>
+  </body>
+</html>

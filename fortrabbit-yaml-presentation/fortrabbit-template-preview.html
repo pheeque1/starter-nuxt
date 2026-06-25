@@ -1,0 +1,979 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>New app from fortrabbit.yml</title>
+    <style>
+      @font-face {
+        font-family: "Hubot Sans";
+        src: url("assets/fonts/HubotSans-Bold.woff2") format("woff2");
+        font-weight: 700;
+        font-display: swap;
+      }
+
+      @font-face {
+        font-family: "Hubot Sans";
+        src: url("assets/fonts/HubotSans-Medium.woff2") format("woff2");
+        font-weight: 500;
+        font-display: swap;
+      }
+
+      :root {
+        --main-50: #f8fafc;
+        --main-100: #f1f5f9;
+        --main-200: #e2e8f0;
+        --main-300: #cbd5e1;
+        --main-400: #94a3b8;
+        --main-500: #64748b;
+        --main-600: #475569;
+        --main-700: #334155;
+        --main-800: #1e293b;
+        --main-900: #0f172a;
+        --link-100: #fae8ff;
+        --link-300: #f0abfc;
+        --link-700: #a21caf;
+        --accent-100: #cffafe;
+        --accent-300: #67e8f9;
+        --move-100: #e0e7ff;
+        --move-300: #a5b4fc;
+        --ok: #15803d;
+        --warn: #a16207;
+        --bad: #b91c1c;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        background: var(--main-100);
+        color: var(--main-900);
+        font-family:
+          ui-sans-serif,
+          system-ui,
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          sans-serif;
+        line-height: 1.5;
+      }
+
+      h1,
+      h2,
+      h3,
+      .fancy {
+        font-family: "Hubot Sans", sans-serif;
+        font-weight: 700;
+        letter-spacing: 0;
+      }
+
+      h1,
+      h2,
+      h3,
+      p {
+        margin: 0;
+      }
+
+      code,
+      pre {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      }
+
+      a {
+        color: var(--link-700);
+        text-decoration: none;
+      }
+
+      a:hover {
+        text-decoration: underline;
+      }
+
+      .brand {
+        font-family: Georgia, "Times New Roman", Times, serif;
+        font-style: italic;
+        font-weight: 700;
+        letter-spacing: 0.2px;
+      }
+
+      .page {
+        min-height: 100vh;
+        padding: clamp(22px, 4vw, 58px);
+      }
+
+      .shell {
+        max-width: 1120px;
+        margin: 0 auto;
+      }
+
+      .topline {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 26px;
+      }
+
+      .back {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        width: fit-content;
+        margin-bottom: 14px;
+        border-radius: 6px;
+        color: var(--main-600);
+        font-size: 14px;
+      }
+
+      .dashboard-header {
+        margin-bottom: 24px;
+      }
+
+      .pre-title {
+        color: var(--main-600);
+        font-size: 14px;
+      }
+
+      .headline-row {
+        display: flex;
+        align-items: baseline;
+        gap: 10px;
+        margin-top: 2px;
+      }
+
+      .headline-row h1 {
+        font-size: clamp(28px, 4vw, 46px);
+        line-height: 1.05;
+      }
+
+      .headline-row span {
+        color: var(--main-500);
+        font-size: 14px;
+      }
+
+      .layout {
+        display: grid;
+        grid-template-columns: minmax(0, 2fr) minmax(250px, 0.8fr);
+        gap: clamp(24px, 4vw, 48px);
+        align-items: start;
+      }
+
+      .steps {
+        position: sticky;
+        top: 18px;
+        display: grid;
+        gap: 22px;
+        max-height: calc(100vh - 36px);
+        overflow-y: auto;
+        padding-bottom: 2px;
+      }
+
+      .steps-nav {
+        position: relative;
+        display: grid;
+        gap: 0;
+        border-radius: 8px;
+        background: var(--main-200);
+        padding: 10px 20px 10px 24px;
+        font-size: 13px;
+      }
+
+      .steps-nav::before {
+        content: "";
+        position: absolute;
+        top: 22px;
+        bottom: 22px;
+        left: 25px;
+        border-left: 1px solid var(--main-500);
+      }
+
+      .step-link {
+        position: relative;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 8px;
+        align-items: center;
+        margin-left: 16px;
+        padding: 6px 2px 6px 10px;
+        border-bottom: 1px solid var(--main-300);
+        color: var(--link-700);
+      }
+
+      .step-link:last-child {
+        border-bottom: 0;
+      }
+
+      .step-link::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: -20px;
+        width: 12px;
+        height: 12px;
+        transform: translateY(-50%);
+        border: 1px solid var(--main-500);
+        border-radius: 999px;
+        background: var(--main-200);
+      }
+
+      .step-link.active {
+        color: var(--main-900);
+        font-weight: 700;
+      }
+
+      .step-link.active::before {
+        background: var(--main-500);
+      }
+
+      .step-value {
+        color: var(--main-500);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .summary-box {
+        border: 1px solid var(--main-300);
+        border-radius: 8px;
+        background: var(--main-50);
+        padding: 16px;
+      }
+
+      .summary-price {
+        margin-top: 6px;
+        font-family: "Hubot Sans", sans-serif;
+        font-size: 32px;
+        font-weight: 700;
+      }
+
+      .summary-line {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 8px 0;
+        border-bottom: 1px solid var(--main-300);
+        color: var(--main-700);
+        font-size: 14px;
+      }
+
+      .summary-line:last-child {
+        border-bottom: 0;
+      }
+
+      .content {
+        display: grid;
+        gap: 22px;
+      }
+
+      .section {
+        scroll-margin-top: 22px;
+        border: 1px solid var(--main-300);
+        border-radius: 8px;
+        background: var(--main-50);
+      }
+
+      .section-header {
+        display: flex;
+        justify-content: space-between;
+        gap: 14px;
+        align-items: start;
+        border-bottom: 1px solid var(--main-300);
+        padding: 16px;
+      }
+
+      .section-header h2 {
+        font-size: 22px;
+      }
+
+      .section-header p {
+        margin-top: 2px;
+        color: var(--main-600);
+        font-size: 14px;
+      }
+
+      .section-body {
+        padding: 16px;
+      }
+
+      .grid {
+        display: grid;
+        gap: 10px;
+      }
+
+      .grid.two {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .field {
+        border-radius: 6px;
+        background: var(--main-100);
+        padding: 10px;
+      }
+
+      .field-label {
+        display: block;
+        margin-bottom: 2px;
+        color: var(--main-500);
+        font-size: 12px;
+        font-weight: 700;
+      }
+
+      .field-value {
+        color: var(--main-800);
+        font-size: 14px;
+        word-break: break-word;
+      }
+
+      .token {
+        display: inline-flex;
+        align-items: center;
+        min-height: 26px;
+        padding: 3px 8px;
+        border-radius: 5px;
+        background: var(--main-200);
+        color: var(--main-700);
+        font-size: 13px;
+        font-weight: 700;
+        white-space: nowrap;
+      }
+
+      .token.ok {
+        background: #dcfce7;
+        color: var(--ok);
+      }
+
+      .token.warn {
+        background: #fef3c7;
+        color: var(--warn);
+      }
+
+      .token.bad {
+        background: #fee2e2;
+        color: var(--bad);
+      }
+
+      .table-wrap {
+        overflow-x: auto;
+      }
+
+      table {
+        width: 100%;
+        min-width: 680px;
+        border-collapse: collapse;
+        font-size: 14px;
+      }
+
+      th {
+        background: var(--main-200);
+        color: var(--main-800);
+        text-align: left;
+        font-weight: 700;
+      }
+
+      th,
+      td {
+        padding: 9px 10px;
+        border-bottom: 1px solid var(--main-300);
+        vertical-align: top;
+      }
+
+      tr:last-child td {
+        border-bottom: 0;
+      }
+
+      .code-block {
+        overflow-x: auto;
+        border-radius: 8px;
+        background: var(--main-900);
+        color: var(--main-50);
+        padding: 14px;
+        font-size: 13px;
+        line-height: 1.45;
+      }
+
+      .info {
+        margin-top: 12px;
+        border: 1px solid var(--accent-300);
+        border-radius: 8px;
+        background: var(--accent-100);
+        padding: 12px;
+        color: var(--main-700);
+        font-size: 14px;
+      }
+
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        gap: 8px;
+        margin-top: 22px;
+      }
+
+      .button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 38px;
+        border: 1px solid var(--main-300);
+        border-radius: 6px;
+        background: var(--main-50);
+        color: var(--main-800);
+        padding: 8px 12px;
+        font: inherit;
+        font-weight: 700;
+      }
+
+      .button.primary {
+        border-color: var(--link-700);
+        background: var(--link-700);
+        color: white;
+      }
+
+      .button:hover {
+        filter: brightness(0.98);
+        text-decoration: none;
+      }
+
+      @media (max-width: 860px) {
+        .layout,
+        .grid.two {
+          grid-template-columns: 1fr;
+        }
+
+        .steps {
+          position: static;
+          order: -1;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page">
+      <div class="shell">
+        <div class="topline">
+          <div class="brand">&bull; fortrabbit</div>
+          <a href="./index.html">Back to presentation</a>
+        </div>
+
+        <a class="back" href="./index.html">&lt; Back</a>
+
+        <header class="dashboard-header">
+          <div class="pre-title">New app</div>
+          <div class="headline-row">
+            <h1>Template preview</h1>
+            <span>fortrabbit/craft-cms-starter</span>
+          </div>
+        </header>
+
+        <div class="layout">
+          <div class="content">
+            <section class="section" id="developer-access">
+              <header class="section-header">
+                <div>
+                  <h2>Developer access</h2>
+                  <p>The team comes from <code>app.yml</code> and is confirmed before creation.</p>
+                </div>
+                <span class="token ok">ready</span>
+              </header>
+              <div class="section-body">
+                <div class="grid two">
+                  <div class="field">
+                    <span class="field-label">Team</span>
+                    <span class="field-value">Park Jun</span>
+                  </div>
+                  <div class="field">
+                    <span class="field-label">Current actor</span>
+                    <span class="field-value">Lusineh Iuno / pn-lusine</span>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <section class="section" id="git-repo">
+              <header class="section-header">
+                <div>
+                  <h2>Git repo</h2>
+                  <p>The template URL was scanned for a <code>.fortrabbit/</code> directory.</p>
+                </div>
+                <span class="token ok">found</span>
+              </header>
+              <div class="section-body">
+                <div class="grid two">
+                  <div class="field">
+                    <span class="field-label">Provider</span>
+                    <span class="field-value">GitHub</span>
+                  </div>
+                  <div class="field">
+                    <span class="field-label">Repository</span>
+                    <span class="field-value">fortrabbit/craft-cms-starter</span>
+                  </div>
+                </div>
+                <div class="info">The files are read before creation, so the user can review the app, environments, domains, and component bookings first.</div>
+              </div>
+            </section>
+
+            <section class="section" id="git-branch">
+              <header class="section-header">
+                <div>
+                  <h2>Git branch</h2>
+                  <p>The branch comes from the template URL or the detected default branch.</p>
+                </div>
+                <span class="token ok">main</span>
+              </header>
+              <div class="section-body">
+                <div class="grid two">
+                  <div class="field">
+                    <span class="field-label">Default branch</span>
+                    <span class="field-value">main</span>
+                  </div>
+                  <div class="field">
+                    <span class="field-label">Source files</span>
+                    <span class="field-value">app.yml, base.yml, production.yml, staging.yml</span>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <section class="section" id="software">
+              <header class="section-header">
+                <div>
+                  <h2>Software</h2>
+                  <p>Detected from the repository and confirmed by <code>app.yml</code>.</p>
+                </div>
+                <span class="token ok">Craft CMS 4.0</span>
+              </header>
+              <div class="section-body">
+                <div class="grid two">
+                  <div class="field">
+                    <span class="field-label">Preset</span>
+                    <span class="field-value">craft-cms</span>
+                  </div>
+                  <div class="field">
+                    <span class="field-label">PHP</span>
+                    <span class="field-value">8.4</span>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <section class="section" id="app-name">
+              <header class="section-header">
+                <div>
+                  <h2>App name</h2>
+                  <p>The name comes from <code>app.yml</code>.</p>
+                </div>
+                <span class="token ok">Bucks</span>
+              </header>
+              <div class="section-body">
+                <div class="field">
+                  <span class="field-label">App</span>
+                  <span class="field-value">Bucks</span>
+                </div>
+              </div>
+            </section>
+
+            <section class="section" id="env-vars">
+              <header class="section-header">
+                <div>
+                  <h2>Env vars</h2>
+                  <p>Template placeholders and software preset values are filled before the app is created.</p>
+                </div>
+                <span class="token warn">1 value needed</span>
+              </header>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Source</th>
+                      <th>Value</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><code>CRAFT_ENVIRONMENT</code></td>
+                      <td>software preset</td>
+                      <td><code>${FORTRABBIT_ENVIRONMENT}</code></td>
+                      <td><span class="token ok">ready</span></td>
+                    </tr>
+                    <tr>
+                      <td><code>CRAFT_STREAM_LOG</code></td>
+                      <td>software preset</td>
+                      <td><code>true</code></td>
+                      <td><span class="token ok">ready</span></td>
+                    </tr>
+                    <tr>
+                      <td><code>CRAFT_SECURITY_KEY</code></td>
+                      <td><code>production.yml</code></td>
+                      <td>entered during create flow</td>
+                      <td><span class="token warn">required</span></td>
+                    </tr>
+                    <tr>
+                      <td><code>CRAFT_DB_DSN</code></td>
+                      <td>software preset</td>
+                      <td><code>${FORTRABBIT_DB_HOST}</code></td>
+                      <td><span class="token ok">ready</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+
+            <section class="section" id="deployment">
+              <header class="section-header">
+                <div>
+                  <h2>Deployment</h2>
+                  <p>Shared settings come from <code>base.yml</code>. Environment files can override them.</p>
+                </div>
+                <span class="token ok">2 commands</span>
+              </header>
+              <div class="section-body">
+                <pre class="code-block"><code>trigger: push
+strategy: merge
+buildCommands:
+  - composer install --no-dev --prefer-dist --no-interaction --no-ansi --no-progress
+  - npm install
+cachedDirectories:
+  - node_modules
+  - vendor</code></pre>
+              </div>
+            </section>
+
+            <section class="section" id="post-deploy">
+              <header class="section-header">
+                <div>
+                  <h2>Post deploy commands</h2>
+                  <p>These run after the deployment is live.</p>
+                </div>
+                <span class="token ok">3 commands</span>
+              </header>
+              <div class="section-body">
+                <pre class="code-block"><code>php craft migrate/all
+php craft project-config/apply
+php craft clear-caches/all</code></pre>
+              </div>
+            </section>
+
+            <section class="section" id="region">
+              <header class="section-header">
+                <div>
+                  <h2>Region</h2>
+                  <p>The region is set when the app is created.</p>
+                </div>
+                <span class="token ok">eu-loc</span>
+              </header>
+              <div class="section-body">
+                <div class="grid two">
+                  <div class="field">
+                    <span class="field-label">Region</span>
+                    <span class="field-value">eu-loc</span>
+                  </div>
+                  <div class="field">
+                    <span class="field-label">Display name</span>
+                    <span class="field-value">Antarctica (Local)</span>
+                  </div>
+                </div>
+                <div class="info">The region is part of app creation. After the app exists, region changes are shown on the dashboard and are not applied from YAML.</div>
+              </div>
+            </section>
+
+            <section class="section" id="runtime">
+              <header class="section-header">
+                <div>
+                  <h2>PHP and MySQL</h2>
+                  <p>Runtime settings are part of the environment config.</p>
+                </div>
+                <span class="token ok">ready</span>
+              </header>
+              <div class="section-body">
+                <div class="grid two">
+                  <div class="field">
+                    <span class="field-label">PHP</span>
+                    <span class="field-value">8.4, keep updated, max execution time 60, upload max filesize 32M</span>
+                  </div>
+                  <div class="field">
+                    <span class="field-label">MySQL</span>
+                    <span class="field-value">8.0, keep updated</span>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <section class="section" id="components">
+              <header class="section-header">
+                <div>
+                  <h2>Components</h2>
+                  <p>Bookings are shown before the user creates the app.</p>
+                </div>
+                <span class="token ok">EUR 1200</span>
+              </header>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Environment</th>
+                      <th>Component</th>
+                      <th>Plan</th>
+                      <th>Monthly</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>production</td>
+                      <td>PHP, MySQL, Storage, Traffic</td>
+                      <td>XS</td>
+                      <td>EUR 600</td>
+                      <td><span class="token ok">book</span></td>
+                    </tr>
+                    <tr>
+                      <td>staging</td>
+                      <td>PHP, MySQL, Storage, Traffic</td>
+                      <td>XS</td>
+                      <td>EUR 600</td>
+                      <td><span class="token ok">book</span></td>
+                    </tr>
+                    <tr>
+                      <td>production</td>
+                      <td>Backups, Jobs</td>
+                      <td>OFF</td>
+                      <td>EUR 0</td>
+                      <td><span class="token">off</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+
+            <section class="section" id="domains">
+              <header class="section-header">
+                <div>
+                  <h2>Domains</h2>
+                  <p>Domains are part of the environment config.</p>
+                </div>
+                <span class="token ok">2 domains</span>
+              </header>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Environment</th>
+                      <th>Domain</th>
+                      <th>Routing</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>production</td>
+                      <td>www.factor-qqbqmrc9r7h.com</td>
+                      <td>Main domain</td>
+                      <td><span class="token ok">create</span></td>
+                    </tr>
+                    <tr>
+                      <td>production</td>
+                      <td>factor-qqbqmrc9r7h.com</td>
+                      <td>Forward to www.factor-qqbqmrc9r7h.com</td>
+                      <td><span class="token ok">create</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+
+            <section class="section" id="firewall">
+              <header class="section-header">
+                <div>
+                  <h2>Firewall</h2>
+                  <p>Incoming WAF and outgoing custom ports are reviewed before creation.</p>
+                </div>
+                <span class="token ok">2 rules</span>
+              </header>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Direction</th>
+                      <th>Name</th>
+                      <th>Rule</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>incoming</td>
+                      <td>Web Application Firewall</td>
+                      <td>enabled</td>
+                      <td><span class="token ok">enable</span></td>
+                    </tr>
+                    <tr>
+                      <td>outgoing</td>
+                      <td>Search API</td>
+                      <td>port 9200</td>
+                      <td><span class="token ok">open</span></td>
+                    </tr>
+                    <tr>
+                      <td>outgoing</td>
+                      <td>External service range</td>
+                      <td>ports 3000-3010</td>
+                      <td><span class="token ok">open</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+
+            <section class="section" id="jobs-crons">
+              <header class="section-header">
+                <div>
+                  <h2>Jobs and crons</h2>
+                  <p>Commands are created with the environment that runs them.</p>
+                </div>
+                <span class="token ok">2 commands</span>
+              </header>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Command</th>
+                      <th>Schedule</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>queue-worker</td>
+                      <td>worker</td>
+                      <td><code>php craft queue/listen</code></td>
+                      <td>always running</td>
+                    </tr>
+                    <tr>
+                      <td>clear-caches</td>
+                      <td>cron</td>
+                      <td><code>php craft clear-caches/all</code></td>
+                      <td><code>0 3 * * *</code></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+
+            <section class="section" id="review">
+              <header class="section-header">
+                <div>
+                  <h2>Review</h2>
+                  <p>This is the final page before creation.</p>
+                </div>
+                <span class="token ok">ready</span>
+              </header>
+              <div class="section-body">
+                <div class="table-wrap">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Status</th>
+                        <th>Field</th>
+                        <th>Message</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td><span class="token ok">valid</span></td>
+                        <td><code>.fortrabbit/base.yml</code></td>
+                        <td>Shared deployment settings are used by production and staging.</td>
+                      </tr>
+                      <tr>
+                        <td><span class="token ok">valid</span></td>
+                        <td><code>production.yml</code></td>
+                        <td>Name creates a new production environment.</td>
+                      </tr>
+                      <tr>
+                        <td><span class="token warn">required</span></td>
+                        <td><code>CRAFT_SECURITY_KEY</code></td>
+                        <td>The value must be entered before creation.</td>
+                      </tr>
+                      <tr>
+                        <td><span class="token ok">valid</span></td>
+                        <td><code>app.yml team</code></td>
+                        <td>The new app will belong to Park Jun.</td>
+                      </tr>
+                      <tr>
+                        <td><span class="token ok">valid</span></td>
+                        <td><code>app.yml region</code></td>
+                        <td>Region will be used for the new app.</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="actions">
+                  <a class="button" href="./index.html">Back to presentation</a>
+                  <button class="button">Download YAML</button>
+                  <button class="button primary">Create app</button>
+                </div>
+              </div>
+            </section>
+          </div>
+
+          <aside class="steps">
+            <nav class="steps-nav" aria-label="New app steps">
+              <a class="step-link active" href="#developer-access"><span>Developer access</span><span class="step-value">Park Jun</span></a>
+              <a class="step-link" href="#git-repo"><span>Git repo</span><span class="step-value">GitHub</span></a>
+              <a class="step-link" href="#git-branch"><span>Git branch</span><span class="step-value">main</span></a>
+              <a class="step-link" href="#software"><span>Software</span><span class="step-value">Craft CMS</span></a>
+              <a class="step-link" href="#app-name"><span>App name</span><span class="step-value">Bucks</span></a>
+              <a class="step-link" href="#env-vars"><span>Env vars</span><span class="step-value">1 required</span></a>
+              <a class="step-link" href="#deployment"><span>Deployment</span><span class="step-value">2 commands</span></a>
+              <a class="step-link" href="#post-deploy"><span>Post deploy commands</span><span class="step-value">3 commands</span></a>
+              <a class="step-link" href="#region"><span>Region</span><span class="step-value">eu-loc</span></a>
+              <a class="step-link" href="#runtime"><span>PHP and MySQL</span><span class="step-value">ready</span></a>
+              <a class="step-link" href="#components"><span>Components</span><span class="step-value">EUR 1200</span></a>
+              <a class="step-link" href="#domains"><span>Domains</span><span class="step-value">2 domains</span></a>
+              <a class="step-link" href="#firewall"><span>Firewall</span><span class="step-value">2 rules</span></a>
+              <a class="step-link" href="#jobs-crons"><span>Jobs and crons</span><span class="step-value">2 commands</span></a>
+              <a class="step-link" href="#review"><span>Review</span><span class="step-value">Ready</span></a>
+            </nav>
+
+            <div class="summary-box">
+              <div class="field-label">Monthly estimate</div>
+              <div class="summary-price">EUR 1200</div>
+              <div class="summary-line"><span>production</span><strong>EUR 600</strong></div>
+              <div class="summary-line"><span>staging</span><strong>EUR 600</strong></div>
+              <div class="summary-line"><span>domains</span><strong>2</strong></div>
+              <div class="summary-line"><span>env vars</span><strong>1 required</strong></div>
+              <div class="summary-line"><span>checks</span><strong>valid</strong></div>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      const links = Array.from(document.querySelectorAll(".step-link"));
+      const sections = links.map((link) => document.querySelector(link.getAttribute("href"))).filter(Boolean);
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          const visible = entries
+            .filter((entry) => entry.isIntersecting)
+            .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+
+          if (!visible) return;
+
+          links.forEach((link) => {
+            link.classList.toggle("active", link.getAttribute("href") === `#${visible.target.id}`);
+          });
+        },
+        { rootMargin: "-15% 0px -65% 0px", threshold: [0.1, 0.3, 0.6] },
+      );
+
+      sections.forEach((section) => observer.observe(section));
+    </script>
+  </body>
+</html>
